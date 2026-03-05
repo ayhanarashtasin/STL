@@ -150,3 +150,83 @@ int main() {
 
     return 0;
 }
+//----------------------------------------------------------
+#include <iostream>
+#include <bitset>
+
+using namespace std;
+
+// A quick helper function to print numbers in 8-bit binary for visual reference
+void printBinary(string label, int val) {
+    cout << label << ": " << bitset<8>(val) << " (Value: " << val << ")\n";
+}
+
+int main() {
+    cout << "========== 1. GCC BUILT-IN FUNCTIONS ==========\n";
+    int x = 12; // Binary: 00001100
+    printBinary("Initial x", x);
+    
+    // Count the number of 1-bits
+    cout << "Popcount (number of 1s): " << __builtin_popcount(x) << "\n";
+    
+    // Find the position of the lowest 1-bit (0-indexed)
+    cout << "Lowest 1-bit position (Trailing Zeros): " << __builtin_ctz(x) << "\n";
+    
+    // Find the position of the lowest 0-bit
+    cout << "Lowest 0-bit position: " << __builtin_ctz(~x) << "\n";
+    
+    // Count the number of leading zeros (Assuming 32-bit integer)
+    cout << "Leading zeros (32-bit int): " << __builtin_clz(x) << "\n";
+
+
+    cout << "\n========== 2. CLASSIC BIT MANIPULATION ==========\n";
+    int y = 12; // Binary: 00001100
+    printBinary("Initial y", y);
+
+    // Turn off the lowest 1-bit
+    printBinary("y & (y - 1) [Turn off lowest 1-bit]", y & (y - 1));
+
+    // Isolate the lowest 1-bit
+    printBinary("y & -y [Isolate lowest 1-bit]", y & -y);
+
+    // Set the lowest 0-bit to 1
+    printBinary("y | (y + 1) [Set lowest 0-bit to 1]", y | (y + 1));
+
+    // Check if a number is a power of 2
+    int p = 16;
+    bool isPowerOfTwo = (p > 0) && ((p & (p - 1)) == 0);
+    cout << "Is 16 a power of 2? " << (isPowerOfTwo ? "Yes" : "No") << "\n";
+
+
+    cout << "\n========== 3. MODIFYING SPECIFIC BITS ==========\n";
+    int z = 10; // Binary: 00001010
+    int i = 2;  // We will target the 2nd bit (0-indexed, so the 3rd bit from the right)
+    printBinary("Initial z", z);
+    cout << "Target bit position (i): " << i << "\n";
+
+    // Check if the i-th bit is set
+    bool isSet = (z >> i) & 1;
+    cout << "Is the " << i << "-th bit set? " << (isSet ? "Yes" : "No") << "\n";
+
+    // Turn ON the i-th bit
+    printBinary("z | (1 << i) [Turn ON i-th bit]", z | (1 << i));
+
+    // Turn OFF the i-th bit
+    printBinary("z & ~(1 << i) [Turn OFF i-th bit]", z & ~(1 << i));
+
+    // Toggle (flip) the i-th bit
+    printBinary("z ^ (1 << i) [Toggle i-th bit]", z ^ (1 << i));
+
+
+    cout << "\n========== 4. XOR SWAP ==========\n";
+    int a = 5, b = 9;
+    cout << "Before swap: a = " << a << ", b = " << b << "\n";
+    
+    a ^= b;
+    b ^= a;
+    a ^= b;
+    
+    cout << "After swap:  a = " << a << ", b = " << b << "\n";
+
+    return 0;
+}
